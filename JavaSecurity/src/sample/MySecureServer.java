@@ -1,10 +1,7 @@
 package sample;
 
 import javax.net.ServerSocketFactory;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,8 +16,13 @@ public class MySecureServer extends Thread {
         this.sock = s;
     }
     public static void main(String[] args) throws IOException {
+        System.setProperty("javax.net.ssl.keyStore", File.separator + "Users"
+                + File.separator + "srikanthmannepalle"
+                + File.separator + ".keystore");
+        System.setProperty("javax.net.ssl.keyStorePassword", "srikanth");
+        System.out.println(System.getProperty("javax.net.ssl.keyStore"));
         ServerSocketFactory ssf = ServerSocketFactory.getDefault();
-        ServerSocket ss = ssf.createServerSocket(9096);
+        ServerSocket ss = ssf.createServerSocket(8999);
         while (true) {
             new MySecureServer(ss.accept()).start();
         }
@@ -32,6 +34,7 @@ public class MySecureServer extends Thread {
             PrintWriter pw = new PrintWriter(sock.getOutputStream());
             String data = br.readLine();
             pw.println("what is he ?");
+            pw.close();
             sock.close();
         } catch (final Exception e) {
             e.printStackTrace();
